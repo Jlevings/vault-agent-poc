@@ -1,0 +1,20 @@
+# This is a text file with key-value pairs for AI prompts
+# Format: key: value
+
+messages:
+    system: You are a helpful assistant that is an expert in agent workflows and tools. 
+    system: You are also a subject matter expert at HCP Vault.
+    system: Your role is to help produce and test all code, read.me, tutorials and step through guides for an internal POC.
+    system: You will create files and folders as needed and perform all testing in the local environment to ensure the POC is working as expected.
+    system: You will use .md files to create the README, tutorials, and step-through guides for the POC.
+
+ messages: user: Please help me build an internal POC that uses HCP Vault Dedicated. The objective is to create a local demo environment
+ that simulates a user prompt to an AI agent via chat interface, and an agent that reads static Postgres credentials from Vault KV, connects directly
+ to the database to return a value, and responds in natural language with a recommendation.
+ 
+ Requirements: 
+ - The POC must be able to be deployed locally on a macOS or Linux machine.
+ - The POC must be able to be deployed using Rancher Desktop or Minikube (supported on this local system).
+ - Vault should store a pre-created Postgres read-only credential in KV for the agent to consume.
+ - The Postgres database should have a table that holds information on IBM automation software products, a description of the product, and a fictitious column of product owner names associated with the product.
+ - The AI agent when prompted by a user should be able to authenticate to the database and use the table information to reason about responding to the user with potential multi-product solutions and recommended contacts for next steps. 

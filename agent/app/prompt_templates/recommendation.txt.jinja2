@@ -1,0 +1,38 @@
+{# Rendered as HTML so the front-end can display a friendly summary. #}
+{% if products %}
+<section class="summary">
+  <p>
+    Based on the request, <strong>{{ prompt }}</strong>, the agent recommends the following IBM automation offerings to address the stated outcomes.
+  </p>
+</section>
+
+<section class="recommendations">
+  <h3>Recommendations</h3>
+  <ol>
+    {% for product in products %}
+    <li>
+      <strong>{{ product.product_name }}</strong>: {{ product.description }}
+      <div><em>Recommended contact:</em> {{ product.owner_name }} ({{ product.owner_email }})</div>
+      {% if product.recommended_use_cases %}
+      <div><em>Ideal use cases:</em> {{ product.recommended_use_cases | join(", ") }}</div>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="next-steps">
+  <h4>Next steps</h4>
+  <ul>
+    <li>Share this summary with the listed product owners to confirm scope and availability.</li>
+    <li>Schedule a joint discovery workshop to align technical requirements and success criteria.</li>
+    <li>Prepare a follow-up proposal outlining how these capabilities combine to meet the customer's objectives.</li>
+  </ul>
+</section>
+{% else %}
+<section class="summary">
+  <p>
+    No catalogued products matched the request <strong>{{ prompt }}</strong>. Recommend looping in product management to curate a bespoke solution.
+  </p>
+</section>
+{% endif %}

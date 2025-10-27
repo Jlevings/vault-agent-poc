@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-service
+  labels:
+    app: agent-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-service
+  template:
+    metadata:
+      labels:
+        app: agent-service
+      annotations:
+        vault.hashicorp.com/agent-inject: "false" # flip to true if using Vault Agent Injector
+    spec:
+      serviceAccountName: agent-service
+      containers:
+        - name: agent
+          image: vault-ai-agent:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            - name: VAULT_ADDR
+              valueFrom:
+                secretKeyRef:
+                  name: agent-config
+                  key: vault_addr
+            - name: VAULT_NAMESPACE
+              valueFrom:
+                secretKeyRef:
+                  name: agent-config
+                  key: vault_namespace
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: agent-config
+                  key: vault_token
+                  optional: true
+            - name: VAULT_KV_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: agent-config
+                  key: vault_kv_path
+            - name: VAULT_KV_USERNAME_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: agent-config
+                  key: vault_kv_username_key
+                  optional: true
+            - name: VAULT_KV_PASSWORD_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: agent-config
+                  key: vault_kv_password_key
+                  optional: true
+            - name: LLM_PROVIDER
+              value: stub
+            - name: LLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: agent-config
+                  key: llm_api_key
+                  optional: true
+            - name: POSTGRES_HOST
+              value: "postgres-0.postgres.vault-ai.svc.cluster.local"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              value: "postgres"
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: agent-service

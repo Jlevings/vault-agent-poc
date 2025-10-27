@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init
+  labels:
+    app: postgres
+data:
+  seed.sql: |
+    CREATE TABLE IF NOT EXISTS ibm_products (
+      id SERIAL PRIMARY KEY,
+      product_name TEXT NOT NULL,
+      description TEXT NOT NULL,
+      owner_name TEXT NOT NULL,
+      owner_email TEXT NOT NULL,
+      recommended_use_cases TEXT[]
+    );
+
+    TRUNCATE TABLE ibm_products;
+
+    INSERT INTO ibm_products (product_name, description, owner_name, owner_email, recommended_use_cases)
+    VALUES
+      ('IBM Process Mining', 'Process intelligence platform that discovers automation opportunities across enterprise workflows.', 'Alex Johnson', 'alex.johnson@example.com', ARRAY['process discovery', 'automation assessment']),
+      ('IBM Instana', 'Observability platform for cloud-native applications with automated root cause analysis.', 'Priya Singh', 'priya.singh@example.com', ARRAY['sre automation', 'performance monitoring']),
+      ('IBM Turbonomic', 'Application resource management to ensure performance through AI-driven automation.', 'Liam Chen', 'liam.chen@example.com', ARRAY['capacity planning', 'cloud optimization']),
+      ('IBM Robotic Process Automation', 'Bot-driven automation for repetitive back-office processes.', 'Emma Davis', 'emma.davis@example.com', ARRAY['task automation', 'citizen development']),
+      ('IBM Maximo Application Suite', 'Integrated suite for asset performance management leveraging AI insights.', 'Noah Martinez', 'noah.martinez@example.com', ARRAY['asset management', 'predictive maintenance']);
