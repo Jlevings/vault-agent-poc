@@ -10,7 +10,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Centralized application settings loaded from environment variables."""
 
-    vault_addr: str = Field(default="https://vault-cluster-agentic-poc-public-vault-60cc883d.03c9ca84.z1.hashicorp.cloud:8200", alias="VAULT_ADDR")
+    vault_addr: str = Field(default=None, alias="VAULT_ADDR")
     vault_namespace: str = Field(default="admin/poc-ai-agent", alias="VAULT_NAMESPACE")
     vault_token: Optional[str] = Field(default=None, alias="VAULT_TOKEN")
     vault_kv_path: str = Field(default="kv/data/postgres/static-creds", alias="VAULT_KV_PATH")
